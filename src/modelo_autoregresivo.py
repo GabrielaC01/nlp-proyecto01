@@ -34,8 +34,8 @@ class ModeloAutoregresivo(nn.Module):
         self.d_model = d_model
 
     def generate_causal_mask(self, size):
-        # Máscara para evitar que un token vea los futuros
-        mask = torch.triu(torch.ones(size, size), diagonal=1).bool()
+        mask = torch.triu(torch.ones(size, size), diagonal=1)
+        mask = mask.masked_fill(mask == 1, float('-inf')).masked_fill(mask == 0, float(0.0))
         return mask
 
     def forward(self, x):
